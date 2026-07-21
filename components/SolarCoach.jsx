@@ -93,15 +93,15 @@ const Choice = ({ selected, onClick, icon: Icon, children, sub }) => (
 
 function Onboarding({ onComplete }) {
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState({ name: "", age: "", weight: "", height: "", activity: "moderado", sleep: "7", profession: "", country: "Uruguay", outingType: "ciudad", weekly: "4", duration: "10", moment: "mañana", dailyGoal: "10 minutos", objective: "", restrictions: [] });
+  const [form, setForm] = useState({ name: "", country: "Uruguay", outingType: "ciudad", weekly: "4", duration: "10", moment: "mañana", dailyGoal: "10 minutos", objective: "", restrictions: [] });
   const update = (key, value) => setForm(f => ({ ...f, [key]: value }));
   const toggleRestriction = value => update("restrictions", form.restrictions.includes(value) ? form.restrictions.filter(x => x !== value) : [...form.restrictions, value]);
-  const next = () => step < 5 ? setStep(s => s + 1) : onComplete(form);
+  const next = () => step < 4 ? setStep(s => s + 1) : onComplete(form);
   return (
     <main className="onboarding-shell">
       <div className="onboarding-card">
         <header className="brand-row"><div className="brand"><SunMark small/><span>Método Solar</span></div>{step > 1 && <button className="icon-button" onClick={() => setStep(s => s - 1)} aria-label="Volver"><ArrowLeft size={20}/></button>}</header>
-        <Stepper step={step} total={5}/>
+        <Stepper step={step} total={4}/>
         <section className="step-content" key={step}>
           {step === 1 && <>
             <div className="onboard-hero"><SunMark/><span className="orbit orbit-one"/><span className="orbit orbit-two"/></div>
@@ -109,27 +109,22 @@ function Onboarding({ onComplete }) {
             <p className="lead">Te acompañaremos durante 21 días con prácticas breves, registro amable y logros que sí importan.</p>
             <label className="field"><span>¿Cómo quieres que te llamemos?</span><input value={form.name} onChange={e => update("name", e.target.value)} placeholder="Tu nombre" autoFocus/></label>
           </>}
-          {step === 2 && <><p className="eyebrow">CONOCER TU RITMO</p><h1>Primero, un poco sobre ti</h1><p className="lead">Solo lo necesario para que tus propuestas se sientan posibles.</p>
-            <div className="field-grid three"><label className="field"><span>Edad</span><input inputMode="numeric" value={form.age} onChange={e=>update("age",e.target.value)} placeholder="57"/></label><label className="field"><span>Peso (kg)</span><input inputMode="decimal" value={form.weight} onChange={e=>update("weight",e.target.value)} placeholder="80"/></label><label className="field"><span>Altura (cm)</span><input inputMode="numeric" value={form.height} onChange={e=>update("height",e.target.value)} placeholder="180"/></label></div>
-            <label className="field"><span>Nivel de actividad</span><div className="segmented">{["sedentario","ligero","moderado","intenso"].map(x=><button className={form.activity===x?"active":""} onClick={()=>update("activity",x)} type="button" key={x}>{x}</button>)}</div></label>
-            <div className="field-grid"><label className="field"><span>Horas de sueño</span><input type="number" min="1" max="14" value={form.sleep} onChange={e=>update("sleep",e.target.value)}/></label><label className="field"><span>Profesión</span><input value={form.profession} onChange={e=>update("profession",e.target.value)} placeholder="Ej. atención al público"/></label></div>
-          </>}
-          {step === 3 && <><p className="eyebrow">TU SALIDA POSIBLE</p><h1>¿Dónde encuentras tu luz?</h1><p className="lead">No hace falta perseguir el Sol. Vamos a adaptarlo a tu vida.</p>
+          {step === 2 && <><p className="eyebrow">TU SALIDA POSIBLE</p><h1>¿Dónde encuentras tu luz?</h1><p className="lead">No hace falta perseguir el Sol. Vamos a adaptarlo a tu vida.</p>
             <label className="field"><span>País de referencia</span><select value={form.country} onChange={e=>update("country",e.target.value)}>{Object.keys(COUNTRY_LOCATIONS).map(country=><option key={country}>{country}</option>)}</select><small className="field-help">Lo usaremos si prefieres no compartir tu ubicación exacta.</small></label>
             <div className="choice-grid">{[["playa",Sunrise],["campo",Leaf],["ciudad",MapPin],["bosque",CloudSun]].map(([x,I])=><Choice key={x} icon={I} selected={form.outingType===x} onClick={()=>update("outingType",x)}>{x[0].toUpperCase()+x.slice(1)}</Choice>)}</div>
             <div className="field-grid"><label className="field"><span>Días por semana</span><input type="range" min="1" max="7" value={form.weekly} onChange={e=>update("weekly",e.target.value)}/><b className="range-value">{form.weekly} días</b></label><label className="field"><span>Duración habitual</span><select value={form.duration} onChange={e=>update("duration",e.target.value)}><option value="2">Salida fugaz</option><option value="5">5 minutos</option><option value="10">10 minutos</option><option value="15">15 minutos</option><option value="20">20 minutos</option></select></label></div>
             <label className="field"><span>Momento preferido</span><div className="segmented roomy">{["amanecer","mañana","tarde","atardecer"].map(x=><button type="button" className={form.moment===x?"active":""} onClick={()=>update("moment",x)} key={x}>{x}</button>)}</div></label>
           </>}
-          {step === 4 && <><p className="eyebrow">UNA META AMABLE</p><h1>¿Qué cuenta como logro?</h1><p className="lead">Elige una meta que puedas sostener incluso en días imperfectos.</p>
+          {step === 3 && <><p className="eyebrow">UNA META AMABLE</p><h1>¿Qué cuenta como logro?</h1><p className="lead">Elige una meta que puedas sostener incluso en días imperfectos.</p>
             <div className="goal-list">{[["Salida fugaz","1–2 min, para mantener el hábito"],["5 minutos","Nivel esencial"],["10 minutos","Luz y presencia"],["15 minutos","Luz y movimiento"]].map(([x,sub])=><Choice key={x} icon={Target} selected={form.dailyGoal===x} onClick={()=>update("dailyGoal",x)} sub={sub}>{x}</Choice>)}</div>
             <label className="field"><span>¿Qué te gustaría encontrar en estos 21 días?</span><textarea value={form.objective} onChange={e=>update("objective",e.target.value)} placeholder="Ej. dormir con más regularidad, sentir más calma…" rows="3"/></label>
           </>}
-          {step === 5 && <><p className="eyebrow">PLAN B, SIN CULPA</p><h1>¿Qué suele interponerse?</h1><p className="lead">Prepararemos una práctica fugaz para esos días. Puedes elegir más de una.</p>
+          {step === 4 && <><p className="eyebrow">PLAN B, SIN CULPA</p><h1>¿Qué suele interponerse?</h1><p className="lead">Prepararemos una práctica fugaz para esos días. Puedes elegir más de una.</p>
             <div className="goal-list">{["Mal tiempo","Estoy enfermo","Estoy enferma","Mucho trabajo"].map(x=><Choice key={x} icon={x==="Mal tiempo"?CloudSun:x==="Mucho trabajo"?Clock3:Zap} selected={form.restrictions.includes(x)} onClick={()=>toggleRestriction(x)}>{x}</Choice>)}</div>
             <div className="kind-note"><Sparkles size={19}/><p><strong>Tu regla esencial</strong><br/>Acércate a la luz, permanece presente y registra una palabra. Un minuto también cuenta.</p></div>
           </>}
         </section>
-        <footer className="onboard-footer"><button className="primary-button" disabled={step===1 && !form.name.trim()} onClick={next}>{step===5?"Comenzar mis 21 días":"Continuar"}<ArrowRight size={18}/></button>{step===1&&<small>Tu información queda guardada solo en este dispositivo.</small>}</footer>
+        <footer className="onboard-footer"><button className="primary-button" disabled={step===1 && !form.name.trim()} onClick={next}>{step===4?"Comenzar mis 21 días":"Continuar"}<ArrowRight size={18}/></button>{step===1&&<small>Tu información queda guardada solo en este dispositivo.</small>}</footer>
       </div>
     </main>
   );
