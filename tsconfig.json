@@ -1,0 +1,36 @@
+# Método Solar — Coach de bienestar
+
+Aplicación React mobile-first basada en *El Método Solar*. Incluye onboarding progresivo, programa de 21 días, registro diario, historial, rachas, recompensas “Soles”, fototeca y lectura visual cálida de las imágenes.
+
+La pantalla de inicio calcula diariamente el amanecer, el atardecer y dos ventanas recomendadas de luz suave según la ubicación del dispositivo. Si la persona no autoriza el GPS, utiliza el país elegido como referencia. Incluye 20 países de Latinoamérica y España.
+
+## Ejecutar localmente
+
+Requiere Node.js 22 o superior.
+
+```bash
+npm install
+npm run dev
+```
+
+La interfaz web está compuesta por:
+
+- `components/SolarCoach.jsx`: artefacto React autocontenido, con `default export` y sin props requeridas.
+- `app/globals.css`: sistema visual responsive y animaciones.
+- `app/page.tsx`: entrada de la versión web.
+
+## Persistencia y privacidad
+
+La app usa `window.storage` cuando está disponible y mantiene un espejo local en `localStorage`. No requiere API keys. Las fotos se comprimen antes de guardarse en el dispositivo.
+
+Los navegadores móviles no permiten crear silenciosamente una carpeta dentro de Fotos/Galería. Por eso, la app mantiene su propia Fototeca y permite guardar cada imagen en el dispositivo mediante una acción explícita.
+
+## Instalar como aplicación
+
+En Android, abre la app en Chrome y elige **Instalar aplicación**. En iPhone, abre Safari, toca **Compartir** y luego **Agregar a pantalla de inicio**. El manifiesto, los iconos y el servicio de funcionamiento sin conexión están incluidos.
+
+La carpeta `android-apk` contiene el proyecto Android y `.github/workflows/build-android-apk.yml` permite generar automáticamente el APK de prueba.
+
+## Criterio de bienestar
+
+La continuidad importa más que la perfección. Los días nublados y la práctica fugaz también cuentan. La aplicación no reemplaza atención médica o psicológica.
